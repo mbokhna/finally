@@ -4,6 +4,7 @@ import type {
   AlertsResponse,
   AiStatus,
   BacktestResult,
+  CandlesResponse,
   PortfolioValuation,
   Side,
   TradeResponse,
@@ -87,4 +88,14 @@ export async function runBacktest(
 export async function getAiStatus(): Promise<AiStatus> {
   const response = await fetch('/api/ai/status')
   return parseJsonOrThrow<AiStatus>(response)
+}
+
+export async function getCandles(
+  symbol: string,
+  interval = '1h',
+  limit = 200,
+): Promise<CandlesResponse> {
+  const params = new URLSearchParams({ interval, limit: limit.toString() })
+  const response = await fetch(`/api/candles/${encodeURIComponent(symbol)}?${params.toString()}`)
+  return parseJsonOrThrow<CandlesResponse>(response)
 }

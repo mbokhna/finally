@@ -22,6 +22,34 @@ def test_get_prices_returns_seeded_watchlist() -> None:
     assert symbols == set(DEFAULT_WATCHLIST)
 
 
+def test_get_candles_returns_ohlcv_series() -> None:
+    with TestClient(app) as client:
+        response = client.get("/api/candles/CRYPTO:BTCUSDT?interval=1h&limit=30")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["symbol"] == "CRYPTO:BTCUSDT"
+    assert body["interval"] == "1h"
+    candles = body["candles"]
+    assert len(candles) == 30
+    first = candles[0]
+    assert set(first) == {"t", "o", "h", "l", "c", "v"}
+    assert first["h"] >= first["o"]
+    assert first["h"] >= first["c"]
+    assert first["l"] <= first["o"]
+    assert first["l"] <= first["c"]
+
+
+def test_get_candles_defaults_interval_and_limit() -> None:
+    with TestClient(app) as client:
+        response = client.get("/api/candles/CRYPTO:BTCUSDT")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["interval"] == "1h"
+    assert len(body["candles"]) == 200
+
+
 class _FakeApp:
     def __init__(self, cache: PriceCache) -> None:
         self.state = _FakeState(cache)

@@ -105,3 +105,18 @@ export interface AiProposalData {
   quantity: number
   reason: string
 }
+
+export interface Candle {
+  t: string
+  o: number
+  h: number
+  l: number
+  c: number
+  v: number
+}
+
+export interface CandlesResponse {
+  symbol: string
+  interval: string
+  candles: Candle[]
+}

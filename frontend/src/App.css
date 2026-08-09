@@ -1,5 +1,5 @@
 .terminal {
-  max-width: 960px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 20px;
   min-height: 100svh;
@@ -23,15 +23,93 @@
 }
 
 .layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
 }
 
-@media (min-width: 800px) {
-  .layout {
+@media (min-width: 900px) {
+  .row-chart {
+    grid-template-columns: 320px 1fr;
+    align-items: start;
+  }
+
+  .row-secondary {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+.watchlist tbody tr {
+  cursor: pointer;
+}
+
+.watchlist tbody tr:hover {
+  background: var(--panel);
+}
+
+.watchlist tbody tr.selected {
+  background: var(--panel);
+  outline: 1px solid var(--border);
+  outline-offset: -1px;
+}
+
+.chart-panel {
+  min-width: 0;
+}
+
+.chart-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.chart-panel-header select {
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--panel);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.chart-panel-price {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-chart {
+  width: 100%;
+  height: 360px;
+  display: block;
+}
+
+.price-chart .wick {
+  stroke-width: 1;
+}
+
+.price-chart .body {
+  stroke-width: 1;
+}
+
+.price-chart .up .wick,
+.price-chart .up .body {
+  stroke: var(--up);
+  fill: var(--up);
+}
+
+.price-chart .down .wick,
+.price-chart .down .body {
+  stroke: var(--down);
+  fill: var(--down);
 }
 
 .trade-form {
@@ -100,10 +178,6 @@
   to {
     background-color: transparent;
   }
-}
-
-.alerts {
-  grid-column: 1 / -1;
 }
 
 .alerts h2 {

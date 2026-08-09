@@ -13,7 +13,12 @@ function flashClass(direction: Direction): string {
   return ''
 }
 
-export function WatchlistGrid() {
+interface Props {
+  selectedSymbol: string
+  onSelect: (symbol: string) => void
+}
+
+export function WatchlistGrid({ selectedSymbol, onSelect }: Props) {
   const snapshot = usePrices()
 
   if (!snapshot) {
@@ -31,7 +36,11 @@ export function WatchlistGrid() {
       </thead>
       <tbody>
         {snapshot.prices.map((update) => (
-          <tr key={update.symbol}>
+          <tr
+            key={update.symbol}
+            className={update.symbol === selectedSymbol ? 'selected' : ''}
+            onClick={() => onSelect(update.symbol)}
+          >
             <td>{update.symbol}</td>
             <td>
               {/* keyed by version so the flash animation retriggers every tick */}

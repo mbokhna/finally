@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { AlertsPanel } from './components/AlertsPanel'
 import { AiAssistant } from './components/ai/AiAssistant'
-import { BacktestPanel } from './components/BacktestPanel'
+import { ChartPanel } from './components/ChartPanel'
 import { Header } from './components/Header'
 import { PositionsTable } from './components/PositionsTable'
 import { TradeForm } from './components/TradeForm'
@@ -14,6 +14,7 @@ import type { PortfolioValuation } from './lib/types'
 function App() {
   const [portfolio, setPortfolio] = useState<PortfolioValuation | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [selectedSymbol, setSelectedSymbol] = useState('CRYPTO:BTCUSDT')
 
   const refreshPortfolio = useCallback(() => {
     getPortfolio()
@@ -32,10 +33,14 @@ function App() {
       <div className="terminal">
         <Header portfolio={portfolio} />
         <main className="layout">
-          <WatchlistGrid />
-          <PositionsTable portfolio={portfolio} />
-          <AlertsPanel />
-          <BacktestPanel />
+          <div className="row row-chart">
+            <WatchlistGrid selectedSymbol={selectedSymbol} onSelect={setSelectedSymbol} />
+            <ChartPanel symbol={selectedSymbol} onSymbolChange={setSelectedSymbol} />
+          </div>
+          <div className="row row-secondary">
+            <PositionsTable portfolio={portfolio} />
+            <AlertsPanel />
+          </div>
         </main>
         <TradeForm onTraded={refreshPortfolio} />
         {error && <p className="error">{error}</p>}
