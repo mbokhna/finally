@@ -201,4 +201,4 @@ push-based rather than poll-based streaming, and a different feature set.
 
 ## Licence
 
-MIT
+[MIT](LICENSE)
