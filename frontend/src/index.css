@@ -1,0 +1,83 @@
+:root {
+  --bg: #0b0d12;
+  --panel: #12151c;
+  --border: #262a35;
+  --text: #c9cdd6;
+  --text-dim: #6b7280;
+  --text-h: #f3f4f6;
+  --up: #22c55e;
+  --down: #ef4444;
+  --mono: ui-monospace, 'SF Mono', Consolas, monospace;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
+  font: 15px/1.5 var(--sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  text-align: right;
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+  color: var(--text-h);
+}
+
+th {
+  color: var(--text-dim);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+
+.up {
+  color: var(--up);
+}
+
+.down {
+  color: var(--down);
+}
+
+.loading,
+.empty {
+  color: var(--text-dim);
+  padding: 12px 0;
+}
+
+.error {
+  color: var(--down);
+  margin: 8px 0 0;
+}

@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.api.errors import register_error_handlers
 from app.api.market import router as market_router
@@ -17,6 +19,7 @@ from app.market.seed_prices import SEEDS
 from app.portfolio.service import PortfolioService
 
 DEFAULT_WATCHLIST = [seed.symbol for seed in SEEDS]
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
 
 @asynccontextmanager
@@ -52,3 +55,9 @@ app.include_router(watchlist_router)
 @app.get("/api/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+# Mounted last and only if present: /api/* above always wins, and a backend-only
+# checkout (frontend not built yet) still starts fine without it.
+if STATIC_DIR.is_dir():
+    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

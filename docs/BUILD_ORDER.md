@@ -75,13 +75,13 @@ This is where bugs hide — test it hard.
 
 **Goal:** something on screen.
 
-- [ ] Vite + React + TypeScript scaffold in `frontend/`
-- [ ] `useEventSource` hook consuming `/api/stream/prices`
-- [ ] Watchlist grid with green/red flash on tick (CSS transition, ~500 ms fade)
-- [ ] Positions table
-- [ ] Cash + total value header
-- [ ] Buy/sell form
-- [ ] Vite build outputs into `backend/static/`; FastAPI serves it
+- [x] Vite + React + TypeScript scaffold in `frontend/`
+- [x] `useEventSource` hook consuming `/api/stream/prices`
+- [x] Watchlist grid with green/red flash on tick (CSS transition, ~500 ms fade)
+- [x] Positions table
+- [x] Cash + total value header
+- [x] Buy/sell form
+- [x] Vite build outputs into `backend/static/`; FastAPI serves it
 
 **Done when:** open `localhost:8000`, see prices ticking, place a trade, see the position appear.
 
