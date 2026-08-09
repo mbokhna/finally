@@ -1,13 +1,13 @@
 # PulseDesk
 
 A self-hosted trading terminal for **crypto** and **Warsaw Stock Exchange (GPW)** equities —
-live prices, a paper-trading portfolio, price alerts, a lightweight backtester, and an
-optional AI analyst. One container, **zero paid dependencies**.
+live prices with a full candlestick chart per instrument, a paper-trading portfolio, price
+alerts, and a built-in AI analyst. One container, **zero paid dependencies**.
 
-![PulseDesk terminal — watchlist, alerts, and a backtest equity curve](docs/images/screenshot.png)
+![PulseDesk terminal — watchlist sidebar and a live candlestick chart](docs/images/screenshot.png)
 
-**Contents:** [What it does](#what-it-does) · [Quickstart](#quickstart) ·
-[Cost: zero](#cost-zero) · [Documentation](#documentation) ·
+**Contents:** [What it does](#what-it-does) · [AI assistant](#ai-assistant) ·
+[Quickstart](#quickstart) · [Cost: zero](#cost-zero) · [Documentation](#documentation) ·
 [Architecture](#architecture-at-a-glance) · [Development](#development) ·
 [Configuration](#configuration) · [Adding a market](#adding-a-market)
 
@@ -16,15 +16,37 @@ optional AI analyst. One container, **zero paid dependencies**.
 ## What it does
 
 - **Live watchlist** — prices tick in place, green on uptick, red on downtick
+- **Click any instrument for a live chart** — a full candlestick chart opens beside the
+  watchlist; switch instruments by clicking a row or from the dropdown above the chart
 - **Paper portfolio** — 100,000 PLN virtual cash, market buy/sell, positions and unrealised P&L
 - **Alerts** — "notify me when BTCUSDT goes above 80,000," with a browser notification on fire
-- **Backtest** — run a moving-average crossover over historical candles, see the equity curve
-- **AI assistant** — a drawer you open with one click, closed by default. Ask about your
-  positions, concentration, or recent trades. It proposes trades; you confirm them
+- **An AI assistant that opens from a side drawer** — see [below](#ai-assistant)
 - **Two markets in one place** — crypto and GPW side by side, which no free terminal does well
 
 All v1 phases are done and verified end to end. See [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md)
 for the phase-by-phase build log.
+
+---
+
+## AI assistant
+
+![The AI assistant drawer open beside the terminal](docs/images/screenshot-ai.png)
+
+A one-click analyst that lives in a drawer, not a permanent panel:
+
+- **Opens from the right, over the terminal** — a floating button (bottom-right) slides it in
+  with a transform, never resizing or reflowing the grid behind it. Closes on the button,
+  `Esc`, or a click outside
+- **Closed by default** and stays that way between reloads until you open it
+- **Reads your live state** — cash, positions, prices, recent trades, and active alerts — fresh
+  on every question, so answers use real numbers, not guesses
+- **Proposes, never executes** — it can suggest a trade, but only a click on **Confirm** sends
+  it, through the exact same `/api/trade` endpoint the manual form uses
+- **Fully optional** — no `OPENROUTER_API_KEY`, no problem. The button is still there; opening
+  it just says so, and every other feature works exactly the same either way
+
+See [`docs/AI_ASSISTANT.md`](docs/AI_ASSISTANT.md) for the design, and [Cost: zero](#cost-zero)
+for what the key does and doesn't unlock.
 
 ---
 
