@@ -1,0 +1,74 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+
+      "Bash(uv sync*)",
+      "Bash(uv run*)",
+      "Bash(uv add*)",
+      "Bash(uv remove*)",
+      "Bash(uv lock*)",
+      "Bash(uv python*)",
+      "Bash(pytest*)",
+      "Bash(mypy*)",
+      "Bash(ruff*)",
+
+      "Bash(npm install*)",
+      "Bash(npm ci*)",
+      "Bash(npm run*)",
+      "Bash(npx *)",
+      "Bash(vite*)",
+      "Bash(node *)",
+
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git branch*)",
+      "Bash(git checkout -b*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git remote -v*)",
+
+      "Bash(docker build*)",
+      "Bash(docker compose *)",
+      "Bash(docker-compose *)",
+      "Bash(docker run*)",
+      "Bash(docker ps*)",
+      "Bash(docker logs*)",
+      "Bash(docker stop*)",
+
+      "Bash(ls*)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(mkdir *)",
+      "Bash(pwd)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push*--force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git branch -D*)",
+      "Bash(git commit --no-verify*)",
+      "Bash(git commit -n*)",
+      "Bash(git push --no-verify*)",
+      "Bash(rm -rf*)",
+      "Bash(rm -fr*)",
+      "Bash(docker system prune*)",
+      "Bash(docker volume rm*)",
+      "Edit(.env)",
+      "Write(.env)",
+      "Edit(**/.env)",
+      "Write(**/.env)"
+    ]
+  }
+}
