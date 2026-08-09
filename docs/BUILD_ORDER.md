@@ -44,10 +44,10 @@ Read `docs/MARKET_DATA.md` first.
 
 **Goal:** prices visible in `curl`.
 
-- [ ] `market/stream.py` — SSE endpoint, version-based change detection
-- [ ] `api/market.py` — `GET /api/prices`, `GET /api/stream/prices`
-- [ ] Wire the data source into FastAPI lifespan (start on boot, stop on shutdown)
-- [ ] Integration test with `TestClient`
+- [x] `market/stream.py` — SSE endpoint, version-based change detection
+- [x] `api/market.py` — `GET /api/prices`, `GET /api/stream/prices`
+- [x] Wire the data source into FastAPI lifespan (start on boot, stop on shutdown)
+- [x] Integration test with `TestClient`
 
 **Done when:** `curl -N localhost:8000/api/stream/prices` prints a live event stream.
 
