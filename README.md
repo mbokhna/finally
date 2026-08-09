@@ -1,13 +1,30 @@
 # PulseDesk
 
-A self-hosted trading terminal for **crypto** and **Warsaw Stock Exchange (GPW)** equities.
+A self-hosted trading terminal for **crypto** and **Warsaw Stock Exchange (GPW)** equities —
+live prices, a paper-trading portfolio, price alerts, a lightweight backtester, and an
+optional AI analyst. One container, **zero paid dependencies**.
 
-Live streaming prices, a paper-trading portfolio, price alerts, and a lightweight
-strategy backtester — running in one container, with **no paid market data subscription**.
+![PulseDesk terminal — watchlist, alerts, and a backtest equity curve](docs/images/screenshot.png)
 
-> **Status:** all v1 phases are done — streaming, portfolio, watchlist, live data, alerts,
-> backtest, Docker packaging, and the AI assistant. See
-> [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) for phase detail.
+**Contents:** [What it does](#what-it-does) · [Quickstart](#quickstart) ·
+[Cost: zero](#cost-zero) · [Documentation](#documentation) ·
+[Architecture](#architecture-at-a-glance) · [Development](#development) ·
+[Configuration](#configuration) · [Adding a market](#adding-a-market)
+
+---
+
+## What it does
+
+- **Live watchlist** — prices tick in place, green on uptick, red on downtick
+- **Paper portfolio** — 100,000 PLN virtual cash, market buy/sell, positions and unrealised P&L
+- **Alerts** — "notify me when BTCUSDT goes above 80,000," with a browser notification on fire
+- **Backtest** — run a moving-average crossover over historical candles, see the equity curve
+- **AI assistant** — a drawer you open with one click, closed by default. Ask about your
+  positions, concentration, or recent trades. It proposes trades; you confirm them
+- **Two markets in one place** — crypto and GPW side by side, which no free terminal does well
+
+All v1 phases are done and verified end to end. See [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md)
+for the phase-by-phase build log.
 
 ---
 
@@ -17,12 +34,13 @@ strategy backtester — running in one container, with **no paid market data sub
 ./start.sh
 ```
 
-Then open http://localhost:8000
+Then open **http://localhost:8000**
 
-No `.env` file, no API key, no account. The default mode runs a built-in market simulator,
-so a clean clone works offline.
+No `.env` file, no API key, no account required. The default mode runs a built-in market
+simulator, so a clean clone works fully offline.
 
-To stream real prices instead:
+<details>
+<summary><strong>Streaming real prices instead of the simulator</strong></summary>
 
 ```bash
 PULSEDESK_MARKET_MODE=live ./start.sh
@@ -30,18 +48,23 @@ PULSEDESK_MARKET_MODE=live ./start.sh
 
 Still no key required — crypto comes from Binance's public WebSocket, GPW from Stooq.
 
+</details>
+
 Stop it with:
 
 ```bash
 ./stop.sh
 ```
 
+Data persists between runs in a Docker volume — see [Configuration](#configuration) if you
+want a clean slate.
+
 ---
 
 ## Cost: zero
 
-Every part of this project is free. There is **no paid data feed, no API key, and no
-account** — not for development, not for live prices.
+Every part of this project is free — no paid data feed, no required API key, no account,
+not for development and not for live prices.
 
 | | |
 |---|---|
@@ -51,23 +74,13 @@ account** — not for development, not for live prices.
 | AI assistant | OpenRouter free-tier models — free key, **optional** |
 | Everything else | SQLite, FastAPI, React, Docker — open source |
 
-The AI assistant is the only part that takes a credential, and it is optional: without
-`OPENROUTER_API_KEY` the rest of the terminal works exactly the same. Only models ending
-in `:free` are accepted — the backend rejects anything else at startup.
+The AI assistant is the only part that takes a credential, and it's optional: without
+`OPENROUTER_API_KEY` the rest of the terminal works exactly the same. Only models ending in
+`:free` are accepted — the backend refuses to enable the assistant otherwise.
 
-**Runs locally only.** PulseDesk is not deployed anywhere and is not designed to be —
-no cloud hosting, no domain, no TLS, no auth. Docker is used to start it with one command
-on your own machine. See [`PLAN.md` §2a](PLAN.md) for the full constraint.
-
-## What it does
-
-- **Live watchlist** — prices tick in place, green on uptick, red on downtick
-- **Paper portfolio** — 100,000 PLN virtual cash, market buy/sell, positions and unrealised P&L
-- **Alerts** — "notify me when BTCUSDT goes above 80,000"
-- **Backtest** — run a moving-average crossover over historical candles, see the equity curve
-- **AI assistant** — a drawer you open with one click, closed by default. Ask about your
-  positions, concentration, or recent trades. It proposes trades; you confirm them
-- **Two markets in one place** — crypto and GPW side by side, which no free terminal does well
+> **Runs locally only.** PulseDesk is not deployed anywhere and isn't designed to be — no
+> cloud hosting, no domain, no TLS, no auth. Docker exists so it starts with one command on
+> your own machine. Full constraint in [`PLAN.md` §2a](PLAN.md).
 
 ---
 
@@ -80,7 +93,7 @@ on your own machine. See [`PLAN.md` §2a](PLAN.md) for the full constraint.
 | [`docs/MARKET_DATA.md`](docs/MARKET_DATA.md) | The data-source abstraction and every free provider evaluated |
 | [`docs/API.md`](docs/API.md) | HTTP endpoints and payloads |
 | [`docs/AI_ASSISTANT.md`](docs/AI_ASSISTANT.md) | The optional AI drawer — design, prompts, proposal flow |
-| [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) | Phased implementation plan |
+| [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) | Phased implementation plan and build log |
 | [`CLAUDE.md`](CLAUDE.md) | Working agreement — conventions, layer rules, cost discipline |
 
 ---
@@ -136,8 +149,32 @@ All optional — the defaults work.
 |---|---|---|
 | `PULSEDESK_MARKET_MODE` | `simulator` | `simulator` or `live` |
 | `PULSEDESK_CURRENCY` | `PLN` | Portfolio base currency |
-| `PULSEDESK_DB_PATH` | `/data/pulsedesk.db` | SQLite location (a Docker volume mount — set this in `.env` to something local, e.g. `./data/pulsedesk.db`, when running `uv run uvicorn` directly instead of `./start.sh`) |
+| `PULSEDESK_DB_PATH` | `/data/pulsedesk.db` | SQLite location — a Docker volume mount |
 | `PULSEDESK_STOOQ_INTERVAL` | `60` | Seconds between GPW polls |
+| `OPENROUTER_API_KEY` | *(unset)* | Enables the AI assistant — optional, see [Cost: zero](#cost-zero) |
+
+<details>
+<summary>Running the backend directly (not via <code>./start.sh</code>)</summary>
+
+`PULSEDESK_DB_PATH` defaults to a Docker volume mount. For `uv run uvicorn` outside Docker,
+point it at a local path in `.env` instead:
+
+```bash
+cp .env.example .env
+# then set: PULSEDESK_DB_PATH=./data/pulsedesk.db
+```
+
+</details>
+
+<details>
+<summary>Resetting to a clean portfolio</summary>
+
+```bash
+docker compose down -v   # removes the named volume — cash resets to 100,000 PLN
+./start.sh
+```
+
+</details>
 
 ---
 
