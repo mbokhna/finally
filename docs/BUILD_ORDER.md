@@ -57,12 +57,12 @@ Read `docs/MARKET_DATA.md` first.
 
 **Goal:** you can buy and sell.
 
-- [ ] `db.py` — SQLite connection, schema from `PLAN.md` §7, lazy init, seed on first run
-- [ ] `portfolio/models.py` — `Position`, `Trade`
-- [ ] `portfolio/service.py` — `buy()`, `sell()`, `get_positions()`, `get_valuation()`
-- [ ] `api/portfolio.py` — `GET /api/portfolio`, `POST /api/trade`
-- [ ] `api/watchlist.py` — `GET`/`POST`/`DELETE /api/watchlist`
-- [ ] Tests: average cost on repeated buys, partial sell, insufficient cash, insufficient shares
+- [x] `db.py` — SQLite connection, schema from `PLAN.md` §7, lazy init, seed on first run
+- [x] `portfolio/models.py` — `Position`, `Trade`
+- [x] `portfolio/service.py` — `buy()`, `sell()`, `get_positions()`, `get_valuation()`
+- [x] `api/portfolio.py` — `GET /api/portfolio`, `POST /api/trade`
+- [x] `api/watchlist.py` — `GET`/`POST`/`DELETE /api/watchlist`
+- [x] Tests: average cost on repeated buys, partial sell, insufficient cash, insufficient shares
 
 **Careful:** average cost changes on buy but **not** on sell. Realised P&L is booked on sell.
 This is where bugs hide — test it hard.
