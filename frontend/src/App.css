@@ -101,3 +101,62 @@
     background-color: transparent;
   }
 }
+
+.alerts {
+  grid-column: 1 / -1;
+}
+
+.alerts h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.alerts tr.triggered td {
+  color: var(--up);
+}
+
+.alerts td button {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.alerts td button:hover {
+  color: var(--down);
+}
+
+.alert-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.alert-form input,
+.alert-form select,
+.alert-form button {
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.alert-form input[type='number'] {
+  width: 100px;
+}
+
+.alert-form button {
+  cursor: pointer;
+  color: var(--text-h);
+}

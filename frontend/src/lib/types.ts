@@ -46,3 +46,18 @@ export interface TradeResponse {
   trade: Trade
   cash: number
 }
+
+export type AlertCondition = 'ABOVE' | 'BELOW'
+
+export interface Alert {
+  id: number
+  symbol: string
+  condition: AlertCondition
+  threshold: number
+  triggered: boolean
+  created_at: string
+}
+
+export interface AlertsResponse {
+  alerts: Alert[]
+}

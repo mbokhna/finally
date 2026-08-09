@@ -115,11 +115,11 @@ depend on it since they run against fixtures.
 
 ## Phase 6 — Alerts
 
-- [ ] `alerts/models.py`, `alerts/engine.py` — evaluated on each cache write
-- [ ] `api/alerts.py` — CRUD
-- [ ] SSE channel `/api/stream/alerts`
-- [ ] Frontend: alert list, create form, browser notification on fire
-- [ ] Tests: fires once and only once, both directions, deleted alert never fires
+- [x] `alerts/models.py`, `alerts/engine.py` — evaluated on each cache write
+- [x] `api/alerts.py` — CRUD
+- [x] SSE channel `/api/stream/alerts`
+- [x] Frontend: alert list, create form, browser notification on fire
+- [x] Tests: fires once and only once, both directions, deleted alert never fires
 
 ---
 

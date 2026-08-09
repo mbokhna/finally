@@ -7,6 +7,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from app.alerts.engine import AlertEngine
+from app.api.alerts import router as alerts_router
 from app.api.errors import register_error_handlers
 from app.api.market import router as market_router
 from app.api.portfolio import router as portfolio_router
@@ -34,13 +36,18 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     source = create_market_data_source(cache, settings)
     await source.start(watchlist)
 
+    alert_engine = AlertEngine(db, cache)
+    await alert_engine.start()
+
     app.state.db = db
     app.state.price_cache = cache
     app.state.market_data_source = source
     app.state.portfolio_service = PortfolioService(db, cache, settings.currency)
+    app.state.alert_engine = alert_engine
 
     yield
 
+    await alert_engine.stop()
     await source.stop()
     db.close()
 
@@ -50,6 +57,7 @@ register_error_handlers(app)
 app.include_router(market_router)
 app.include_router(portfolio_router)
 app.include_router(watchlist_router)
+app.include_router(alerts_router)
 
 
 @app.get("/api/health")

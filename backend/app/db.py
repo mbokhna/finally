@@ -180,3 +180,48 @@ class Database:
     def remove_watchlist_symbol(self, symbol: str) -> bool:
         cursor = self.connection.execute("DELETE FROM watchlist WHERE symbol = ?", (symbol,))
         return cursor.rowcount > 0
+
+    # --- alerts ---
+
+    def get_alerts(self) -> list[tuple[int, str, str, float, bool, str]]:
+        rows = self.connection.execute(
+            "SELECT id, symbol, condition, threshold, triggered, created_at "
+            "FROM alerts ORDER BY id"
+        ).fetchall()
+        return [_row_to_alert_tuple(row) for row in rows]
+
+    def get_active_alerts(self) -> list[tuple[int, str, str, float, bool, str]]:
+        rows = self.connection.execute(
+            "SELECT id, symbol, condition, threshold, triggered, created_at "
+            "FROM alerts WHERE triggered = 0 ORDER BY id"
+        ).fetchall()
+        return [_row_to_alert_tuple(row) for row in rows]
+
+    def insert_alert(self, symbol: str, condition: str, threshold: float) -> tuple[int, str]:
+        created_at = datetime.now(UTC).isoformat()
+        cursor = self.connection.execute(
+            "INSERT INTO alerts (symbol, condition, threshold, triggered, created_at) "
+            "VALUES (?, ?, ?, 0, ?)",
+            (symbol, condition, threshold, created_at),
+        )
+        alert_id = cursor.lastrowid
+        assert alert_id is not None
+        return int(alert_id), created_at
+
+    def mark_alert_triggered(self, alert_id: int) -> None:
+        self.connection.execute("UPDATE alerts SET triggered = 1 WHERE id = ?", (alert_id,))
+
+    def delete_alert(self, alert_id: int) -> bool:
+        cursor = self.connection.execute("DELETE FROM alerts WHERE id = ?", (alert_id,))
+        return cursor.rowcount > 0
+
+
+def _row_to_alert_tuple(row: sqlite3.Row) -> tuple[int, str, str, float, bool, str]:
+    return (
+        int(row["id"]),
+        str(row["symbol"]),
+        str(row["condition"]),
+        float(row["threshold"]),
+        bool(row["triggered"]),
+        str(row["created_at"]),
+    )
