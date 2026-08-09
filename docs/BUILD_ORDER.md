@@ -28,13 +28,13 @@ Estimated total: 2–3 focused days.
 
 Read `docs/MARKET_DATA.md` first.
 
-- [ ] `market/models.py` — `PriceUpdate` (frozen), `Candle`
-- [ ] `market/interface.py` — the `MarketDataSource` ABC
-- [ ] `market/cache.py` — `PriceCache` with lock and version counter
-- [ ] `market/seed_prices.py` — starting prices, per-symbol drift/volatility, correlation groups
-- [ ] `market/simulator.py` — GBM with Cholesky-correlated draws, seeded RNG, shock events
-- [ ] `market/factory.py` — returns the simulator for now
-- [ ] `tests/market/` — cache, models, simulator determinism
+- [x] `market/models.py` — `PriceUpdate` (frozen), `Candle`
+- [x] `market/interface.py` — the `MarketDataSource` ABC
+- [x] `market/cache.py` — `PriceCache` with lock and version counter
+- [x] `market/seed_prices.py` — starting prices, per-symbol drift/volatility, correlation groups
+- [x] `market/simulator.py` — GBM with Cholesky-correlated draws, seeded RNG, shock events
+- [x] `market/factory.py` — returns the simulator for now
+- [x] `tests/market/` — cache, models, simulator determinism
 
 **Done when:** a seeded simulator produces the identical price sequence across two runs.
 
