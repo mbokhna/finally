@@ -13,10 +13,10 @@ Estimated total: 2–3 focused days.
 
 **Goal:** an empty app that starts.
 
-- [ ] `backend/pyproject.toml` with uv, FastAPI, uvicorn, pytest, mypy, ruff
-- [ ] `app/main.py` — FastAPI instance, `/api/health` returning `{"status": "ok"}`
-- [ ] `app/config.py` — `Settings` loaded from env with the defaults in `PLAN.md` §8
-- [ ] `tests/test_health.py`
+- [x] `backend/pyproject.toml` with uv, FastAPI, uvicorn, pytest, mypy, ruff
+- [x] `app/main.py` — FastAPI instance, `/api/health` returning `{"status": "ok"}`
+- [x] `app/config.py` — `Settings` loaded from env with the defaults in `PLAN.md` §8
+- [x] `tests/test_health.py`
 
 **Done when:** `uv run uvicorn app.main:app` serves `/api/health`.
 
