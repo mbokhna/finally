@@ -91,16 +91,25 @@ This is where bugs hide — test it hard.
 
 **Goal:** real prices.
 
-- [ ] `market/binance.py` — WebSocket client, reconnect with exponential backoff,
+- [x] `market/binance.py` — WebSocket client, reconnect with exponential backoff,
       runtime subscribe/unsubscribe, `get_candles` via REST klines
-- [ ] `market/stooq.py` — CSV poller, 60 s interval, "N/D" handling, daily history
-- [ ] `market/composite.py` — prefix router, lazy child start
-- [ ] Update `factory.py` to honour `PULSEDESK_MARKET_MODE`
-- [ ] `tests/market/test_contract.py` — parametrised contract suite over all three sources
-- [ ] Fixtures under `tests/fixtures/`
+- [x] `market/stooq.py` — CSV poller, 60 s interval, "N/D" handling, daily history
+- [x] `market/composite.py` — prefix router, lazy child start
+- [x] Update `factory.py` to honour `PULSEDESK_MARKET_MODE`
+- [x] `tests/market/test_contract.py` — parametrised contract suite over all three sources
+- [x] Fixtures under `tests/fixtures/`
 
 **Done when:** `PULSEDESK_MARKET_MODE=live` streams real BTC and PKN prices, and switching
 back to `simulator` still works with no code change.
+
+**Verified live 2026-08-09:** Binance streams real trades correctly (BTCUSDT ticking at its
+real market price, cache version climbing fast). Stooq's documented endpoints have changed
+since `docs/MARKET_DATA.md` was written — `/q/l/` now 404s outright and `/q/d/l/` sits behind
+a JS proof-of-work challenge, for every symbol, not just GPW ones. `StooqDataSource` handles
+this exactly as designed: any non-CSV or error response degrades to "no update" (same path as
+"N/D"), so live mode runs with crypto prices flowing and GPW simply absent, no crash. Re-check
+whether Stooq is reachable before relying on real GPW prices; the contract/unit tests don't
+depend on it since they run against fixtures.
 
 ---
 
