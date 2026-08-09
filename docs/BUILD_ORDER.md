@@ -169,13 +169,22 @@ unchanged; with it set, the drawer answers questions and proposes trades that re
 This is packaging for local use, **not deployment**. Nothing here targets a cloud host —
 see `PLAN.md` §2a.
 
-- [ ] Multi-stage `Dockerfile` — node build → python runtime, static copied in
-- [ ] `docker-compose.yml` with a named volume for `/data`, port bound to `127.0.0.1:8000`
-- [ ] `start.sh` / `stop.sh`
-- [ ] README quickstart verified from a clean clone with no `.env` and no network
-- [ ] Full test suite green, `mypy --strict` clean, `ruff` clean
+- [x] Multi-stage `Dockerfile` — node build → python runtime, static copied in
+- [x] `docker-compose.yml` with a named volume for `/data`, port bound to `127.0.0.1:8000`
+- [x] `start.sh` / `stop.sh`
+- [x] README quickstart verified from a clean clone with no `.env` and no network
+- [x] Full test suite green, `mypy --strict` clean, `ruff` clean
 
 **Done when:** a clean clone runs `./start.sh` and works offline in simulator mode.
+
+**Caught during verification:** the first `CMD` used `uv run uvicorn ...`. `uv run`
+re-checks the project's full sync state (dev dependency group included) on every
+invocation and reaches for the network to fix any mismatch against the image's
+`--no-dev` install — so the container failed outright under `docker run --network
+none`. Fixed by calling the venv's `uvicorn` binary directly (`.venv/bin/uvicorn`),
+bypassing `uv run`'s sync check entirely. Re-verified with `--network none`: starts
+clean, all 10 default symbols streaming. Also confirmed data survives a container
+restart (named volume) and the port is bound to `127.0.0.1` only.
 
 ---
 

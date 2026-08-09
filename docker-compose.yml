@@ -1,0 +1,19 @@
+services:
+  pulsedesk:
+    build: .
+    # Bound to localhost only — this app has no auth and is never internet-facing.
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - pulsedesk-data:/data
+    environment:
+      PULSEDESK_MARKET_MODE: ${PULSEDESK_MARKET_MODE:-simulator}
+      PULSEDESK_CURRENCY: ${PULSEDESK_CURRENCY:-PLN}
+      PULSEDESK_STOOQ_INTERVAL: ${PULSEDESK_STOOQ_INTERVAL:-60}
+      PULSEDESK_SEED: ${PULSEDESK_SEED:-42}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      PULSEDESK_AI_MODEL: ${PULSEDESK_AI_MODEL:-some-provider/some-model:free}
+      PULSEDESK_AI_MAX_TOKENS: ${PULSEDESK_AI_MAX_TOKENS:-800}
+
+volumes:
+  pulsedesk-data:

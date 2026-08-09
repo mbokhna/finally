@@ -1,0 +1,29 @@
+.git
+.gitignore
+.dockerignore
+.claude
+docs
+README.md
+PLAN.md
+CLAUDE.md
+
+# Python
+backend/.venv
+backend/**/__pycache__
+backend/.pytest_cache
+backend/.mypy_cache
+backend/.ruff_cache
+backend/.coverage
+backend/htmlcov
+
+# Node
+frontend/node_modules
+frontend/dist
+
+# Stale local build output — the frontend-build stage produces its own
+backend/static
+
+# Data
+*.db
+*.db-journal
+/data

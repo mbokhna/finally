@@ -5,8 +5,10 @@ A self-hosted trading terminal for **crypto** and **Warsaw Stock Exchange (GPW)*
 Live streaming prices, a paper-trading portfolio, price alerts, and a lightweight
 strategy backtester — running in one container, with **no paid market data subscription**.
 
-> **Status:** specification complete, implementation in progress.
-> See [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) for the current phase.
+> **Status:** streaming, portfolio, watchlist, live data, alerts, backtest, and Docker
+> packaging are done. The AI assistant (Phase 8) is deferred until an `OPENROUTER_API_KEY`
+> is available — every other feature works fully without it. See
+> [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) for phase detail.
 
 ---
 
@@ -28,6 +30,12 @@ PULSEDESK_MARKET_MODE=live ./start.sh
 ```
 
 Still no key required — crypto comes from Binance's public WebSocket, GPW from Stooq.
+
+Stop it with:
+
+```bash
+./stop.sh
+```
 
 ---
 
@@ -129,7 +137,7 @@ All optional — the defaults work.
 |---|---|---|
 | `PULSEDESK_MARKET_MODE` | `simulator` | `simulator` or `live` |
 | `PULSEDESK_CURRENCY` | `PLN` | Portfolio base currency |
-| `PULSEDESK_DB_PATH` | `/data/pulsedesk.db` | SQLite location |
+| `PULSEDESK_DB_PATH` | `/data/pulsedesk.db` | SQLite location (a Docker volume mount — set this in `.env` to something local, e.g. `./data/pulsedesk.db`, when running `uv run uvicorn` directly instead of `./start.sh`) |
 | `PULSEDESK_STOOQ_INTERVAL` | `60` | Seconds between GPW polls |
 
 ---
