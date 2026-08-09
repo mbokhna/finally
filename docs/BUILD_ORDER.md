@@ -143,14 +143,14 @@ when unconfigured.
 
 Read `docs/AI_ASSISTANT.md` first.
 
-- [ ] `ai/client.py` — OpenRouter via httpx, streaming, `:free` model validation at startup
-- [ ] `ai/context.py` — compact plain-text portfolio/price/trade/alert context
-- [ ] `ai/prompts.py` — system prompt
-- [ ] `ai/proposals.py` — extract and validate proposal blocks
-- [ ] `api/ai.py` — `POST /api/ai/chat` (SSE), `GET /api/ai/status`
-- [ ] `/api/health` reports `"ai": "configured" | "unconfigured"`
-- [ ] Frontend: `AiButton`, `AiDrawer`, `AiMessage`, `AiProposal`, `useAiChat`
-- [ ] Tests: fake transport, context assembly, proposal parsing, **app fully works with
+- [x] `ai/client.py` — OpenRouter via httpx, streaming, `:free` model validation at startup
+- [x] `ai/context.py` — compact plain-text portfolio/price/trade/alert context
+- [x] `ai/prompts.py` — system prompt
+- [x] `ai/proposals.py` — extract and validate proposal blocks
+- [x] `api/ai.py` — `POST /api/ai/chat` (SSE), `GET /api/ai/status`
+- [x] `/api/health` reports `"ai": "configured" | "unconfigured"`
+- [x] Frontend: `AiButton`, `AiDrawer`, `AiMessage`, `AiProposal`, `useAiChat`
+- [x] Tests: fake transport, context assembly, proposal parsing, **app fully works with
       no key set**, drawer opening does not reflow the terminal grid
 
 **Careful:** the drawer overlays with `transform`; it must not be a flex sibling of the
@@ -159,6 +159,28 @@ endpoint.
 
 **Done when:** with `OPENROUTER_API_KEY` unset, every test passes and the terminal is
 unchanged; with it set, the drawer answers questions and proposes trades that require a click.
+
+**Notes from implementation:**
+- `Settings.ai_configured` requires *both* a key and a model ending in `:free`. A key with a
+  non-free model is treated as unconfigured (503, not a startup crash) — the assistant must
+  never be able to take down the rest of the app (PLAN.md §11 / non-negotiable #1b).
+- The chat SSE response is not token-by-token: `open_chat_stream`/`iter_tokens` fully buffer
+  the OpenRouter reply server-side before emitting one `token` event and (if present) one
+  `proposal` event. This was deliberate — streaming raw deltas to the browser would flash the
+  raw ` ```proposal ` fence before it could be parsed and stripped, which the spec explicitly
+  rules out ("Extracts the block, strips it from the prose"). True incremental streaming with
+  fence look-ahead is a reasonable v2 improvement, not required for v1.
+- 429 from OpenRouter needs to surface as a real HTTP 429, but by the time an SSE
+  `StreamingResponse` starts, the status code can't change. `open_chat_stream` uses
+  `http_client.send(request, stream=True)` (not the `client.stream()` context manager) so the
+  route can inspect `response.status_code` *before* deciding whether to return a
+  `StreamingResponse` at all.
+- Verified live end-to-end against the real OpenRouter API with `openai/gpt-oss-20b:free`:
+  asked a real question, got a correct answer from live portfolio state; asked for a trade
+  proposal, got a valid `proposal` event, clicked Confirm, and the trade executed through the
+  ordinary `/api/trade` endpoint (cash and positions updated correctly). Also verified with no
+  key set: drawer shows the unconfigured message, and the terminal grid's bounding box is
+  pixel-identical before and after opening the drawer.
 
 ---
 

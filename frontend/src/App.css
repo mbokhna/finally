@@ -228,3 +228,217 @@
   color: var(--text-dim);
   margin-top: 8px;
 }
+
+/* AI assistant — overlays with transform only, never a flex sibling of
+   .layout, so opening it never reflows the terminal grid behind it. */
+
+.ai-widget {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.ai-widget > * {
+  pointer-events: auto;
+}
+
+.ai-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 101;
+}
+
+/* The drawer has its own header close control; while open, the drawer's
+   content occupies this same bottom-right corner, so hide the launcher
+   rather than stack two overlapping click targets. */
+.ai-widget.drawer-open .ai-button {
+  display: none;
+}
+
+.ai-unread-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--up);
+}
+
+.ai-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 100vw;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 200ms ease;
+  z-index: 100;
+}
+
+.ai-drawer.open {
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) {
+  .ai-drawer {
+    width: 100vw;
+  }
+}
+
+.ai-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-drawer-header h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin: 0;
+}
+
+.ai-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ai-drawer-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow-y: auto;
+  gap: 12px;
+}
+
+.ai-unconfigured {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.ai-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.ai-message {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-message-text {
+  white-space: pre-wrap;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.ai-message.user .ai-message-text {
+  border-color: var(--text-dim);
+}
+
+.ai-thinking {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.ai-proposal {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.ai-proposal-header {
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.ai-proposal-reason {
+  color: var(--text-dim);
+  margin: 6px 0 0;
+}
+
+.ai-proposal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ai-proposal-actions button {
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.ai-input-form {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.ai-input-form input {
+  flex: 1;
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.ai-input-form button {
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--panel);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.ai-input-form button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

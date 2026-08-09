@@ -85,3 +85,23 @@ export interface BacktestResult {
   equity_curve: EquityPoint[]
   metrics: BacktestMetrics
 }
+
+export interface AiStatus {
+  configured: boolean
+  model: string
+}
+
+export type AiRole = 'user' | 'assistant'
+
+export interface AiMessageData {
+  id: number
+  role: AiRole
+  text: string
+}
+
+export interface AiProposalData {
+  action: Side
+  symbol: string
+  quantity: number
+  reason: string
+}

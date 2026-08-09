@@ -5,9 +5,8 @@ A self-hosted trading terminal for **crypto** and **Warsaw Stock Exchange (GPW)*
 Live streaming prices, a paper-trading portfolio, price alerts, and a lightweight
 strategy backtester — running in one container, with **no paid market data subscription**.
 
-> **Status:** streaming, portfolio, watchlist, live data, alerts, backtest, and Docker
-> packaging are done. The AI assistant (Phase 8) is deferred until an `OPENROUTER_API_KEY`
-> is available — every other feature works fully without it. See
+> **Status:** all v1 phases are done — streaming, portfolio, watchlist, live data, alerts,
+> backtest, Docker packaging, and the AI assistant. See
 > [`docs/BUILD_ORDER.md`](docs/BUILD_ORDER.md) for phase detail.
 
 ---

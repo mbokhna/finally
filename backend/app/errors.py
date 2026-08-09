@@ -19,3 +19,10 @@ class BusinessRuleError(DomainError):
 
 class UpstreamUnavailableError(DomainError):
     """A required upstream (price, live data) is unavailable — maps to HTTP 503."""
+
+
+class RateLimitedError(DomainError):
+    """An upstream rate limit was hit — maps to HTTP 429. Expected under a
+
+    free-tier model, not an incident.
+    """

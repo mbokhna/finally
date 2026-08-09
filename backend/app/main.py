@@ -3,18 +3,21 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import cast
 
-from fastapi import FastAPI
+import httpx
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
 from app.alerts.engine import AlertEngine
+from app.api.ai import router as ai_router
 from app.api.alerts import router as alerts_router
 from app.api.backtest import router as backtest_router
 from app.api.errors import register_error_handlers
 from app.api.market import router as market_router
 from app.api.portfolio import router as portfolio_router
 from app.api.watchlist import router as watchlist_router
-from app.config import get_settings
+from app.config import Settings, get_settings
 from app.db import Database
 from app.market.cache import PriceCache
 from app.market.factory import create_market_data_source
@@ -40,14 +43,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     alert_engine = AlertEngine(db, cache)
     await alert_engine.start()
 
+    ai_http_client = httpx.AsyncClient(timeout=30.0)
+
+    app.state.settings = settings
     app.state.db = db
     app.state.price_cache = cache
     app.state.market_data_source = source
     app.state.portfolio_service = PortfolioService(db, cache, settings.currency)
     app.state.alert_engine = alert_engine
+    app.state.ai_http_client = ai_http_client
 
     yield
 
+    await ai_http_client.aclose()
     await alert_engine.stop()
     await source.stop()
     db.close()
@@ -60,11 +68,17 @@ app.include_router(portfolio_router)
 app.include_router(watchlist_router)
 app.include_router(alerts_router)
 app.include_router(backtest_router)
+app.include_router(ai_router)
 
 
 @app.get("/api/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
+async def health(request: Request) -> dict[str, object]:
+    settings = cast(Settings, request.app.state.settings)
+    return {
+        "status": "ok",
+        "market_mode": settings.market_mode,
+        "ai": "configured" if settings.ai_configured else "unconfigured",
+    }
 
 
 # Mounted last and only if present: /api/* above always wins, and a backend-only

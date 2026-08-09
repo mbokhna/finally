@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { AlertsPanel } from './components/AlertsPanel'
+import { AiAssistant } from './components/ai/AiAssistant'
 import { BacktestPanel } from './components/BacktestPanel'
 import { Header } from './components/Header'
 import { PositionsTable } from './components/PositionsTable'
@@ -39,6 +40,7 @@ function App() {
         <TradeForm onTraded={refreshPortfolio} />
         {error && <p className="error">{error}</p>}
       </div>
+      <AiAssistant onTraded={refreshPortfolio} />
     </PriceProvider>
   )
 }

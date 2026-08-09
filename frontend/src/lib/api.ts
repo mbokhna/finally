@@ -2,6 +2,7 @@ import type {
   Alert,
   AlertCondition,
   AlertsResponse,
+  AiStatus,
   BacktestResult,
   PortfolioValuation,
   Side,
@@ -81,4 +82,9 @@ export async function runBacktest(
     }),
   })
   return parseJsonOrThrow<BacktestResult>(response)
+}
+
+export async function getAiStatus(): Promise<AiStatus> {
+  const response = await fetch('/api/ai/status')
+  return parseJsonOrThrow<AiStatus>(response)
 }

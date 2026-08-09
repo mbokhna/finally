@@ -19,6 +19,13 @@ class Settings:
     ai_model: str
     ai_max_tokens: int
 
+    @property
+    def ai_configured(self) -> bool:
+        # A key with a non-free model is treated as unconfigured rather than a
+        # startup error — the assistant is optional and must never block the
+        # rest of the app from starting (PLAN.md §11).
+        return self.openrouter_api_key is not None and self.ai_model.endswith(":free")
+
 
 def _env(name: str, default: str) -> str:
     return os.environ.get(name, default)

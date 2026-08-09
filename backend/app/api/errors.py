@@ -5,7 +5,13 @@ from collections.abc import Awaitable, Callable
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.errors import BusinessRuleError, NotFoundError, UpstreamUnavailableError, ValidationError
+from app.errors import (
+    BusinessRuleError,
+    NotFoundError,
+    RateLimitedError,
+    UpstreamUnavailableError,
+    ValidationError,
+)
 
 ExceptionHandler = Callable[[Request, Exception], Awaitable[JSONResponse]]
 
@@ -13,6 +19,7 @@ _STATUS_BY_ERROR: dict[type[Exception], int] = {
     ValidationError: 400,
     NotFoundError: 404,
     BusinessRuleError: 409,
+    RateLimitedError: 429,
     UpstreamUnavailableError: 503,
 }
 
