@@ -2,6 +2,7 @@ import type {
   Alert,
   AlertCondition,
   AlertsResponse,
+  BacktestResult,
   PortfolioValuation,
   Side,
   TradeResponse,
@@ -59,4 +60,25 @@ export async function createAlert(
 export async function deleteAlert(id: number): Promise<void> {
   const response = await fetch(`/api/alerts/${id.toString()}`, { method: 'DELETE' })
   await parseJsonOrThrow<{ status: string }>(response)
+}
+
+export async function runBacktest(
+  symbol: string,
+  fast: number,
+  slow: number,
+  initialCash: number,
+): Promise<BacktestResult> {
+  const response = await fetch('/api/backtest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      symbol,
+      interval: '1h',
+      limit: 200,
+      strategy: 'ma_crossover',
+      params: { fast, slow },
+      initial_cash: initialCash,
+    }),
+  })
+  return parseJsonOrThrow<BacktestResult>(response)
 }

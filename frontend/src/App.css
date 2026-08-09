@@ -160,3 +160,71 @@
   cursor: pointer;
   color: var(--text-h);
 }
+
+.backtest {
+  grid-column: 1 / -1;
+}
+
+.backtest h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.backtest-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.backtest-form input,
+.backtest-form button {
+  font: inherit;
+  font-family: var(--mono);
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.backtest-form input[type='number'] {
+  width: 70px;
+}
+
+.backtest-form button {
+  cursor: pointer;
+  color: var(--text-h);
+}
+
+.backtest-form button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.backtest-result {
+  margin-top: 16px;
+}
+
+.equity-chart {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+.equity-chart polyline {
+  stroke: #60a5fa;
+  stroke-width: 2;
+}
+
+.backtest-metrics {
+  display: flex;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 8px;
+}

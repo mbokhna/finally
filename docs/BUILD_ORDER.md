@@ -125,11 +125,11 @@ depend on it since they run against fixtures.
 
 ## Phase 7 — Backtest
 
-- [ ] `backtest/strategies.py` — moving-average crossover, parametrised windows
-- [ ] `backtest/runner.py` — walk candles, simulate fills, produce an equity curve
-- [ ] `api/backtest.py` — `POST /api/backtest`
-- [ ] Frontend: instrument picker, MA inputs, equity curve chart
-- [ ] Tests: known candle series → known trade list
+- [x] `backtest/strategies.py` — moving-average crossover, parametrised windows
+- [x] `backtest/runner.py` — walk candles, simulate fills, produce an equity curve
+- [x] `api/backtest.py` — `POST /api/backtest`
+- [x] Frontend: instrument picker, MA inputs, equity curve chart
+- [x] Tests: known candle series → known trade list
 
 **Careful:** do not look ahead. A signal computed from candle `i` may only be executed at
 candle `i+1`'s open. Look-ahead bias is the classic backtest bug.

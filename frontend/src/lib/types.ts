@@ -61,3 +61,27 @@ export interface Alert {
 export interface AlertsResponse {
   alerts: Alert[]
 }
+
+export interface BacktestTrade {
+  t: string
+  side: Side
+  price: number
+  quantity: number
+}
+
+export interface EquityPoint {
+  t: string
+  value: number
+}
+
+export interface BacktestMetrics {
+  total_return_pct: number
+  max_drawdown_pct: number
+  trade_count: number
+}
+
+export interface BacktestResult {
+  trades: BacktestTrade[]
+  equity_curve: EquityPoint[]
+  metrics: BacktestMetrics
+}

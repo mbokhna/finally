@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.alerts.engine import AlertEngine
 from app.api.alerts import router as alerts_router
+from app.api.backtest import router as backtest_router
 from app.api.errors import register_error_handlers
 from app.api.market import router as market_router
 from app.api.portfolio import router as portfolio_router
@@ -58,6 +59,7 @@ app.include_router(market_router)
 app.include_router(portfolio_router)
 app.include_router(watchlist_router)
 app.include_router(alerts_router)
+app.include_router(backtest_router)
 
 
 @app.get("/api/health")

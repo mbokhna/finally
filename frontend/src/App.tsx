@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import { AlertsPanel } from './components/AlertsPanel'
+import { BacktestPanel } from './components/BacktestPanel'
 import { Header } from './components/Header'
 import { PositionsTable } from './components/PositionsTable'
 import { TradeForm } from './components/TradeForm'
@@ -33,6 +34,7 @@ function App() {
           <WatchlistGrid />
           <PositionsTable portfolio={portfolio} />
           <AlertsPanel />
+          <BacktestPanel />
         </main>
         <TradeForm onTraded={refreshPortfolio} />
         {error && <p className="error">{error}</p>}
